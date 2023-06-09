@@ -81,3 +81,16 @@ bool Board::isTaken(unsigned int column, unsigned int row) const
         return true;
     return board[column * _N + row];
 }
+
+bool Board::isEmpty() const
+{
+    for(unsigned int i = 0; i < _N; ++i)
+    {
+        for(unsigned int j = 0; j < _N; ++j)
+        {
+            if(board[i * _N + j] != '\0')
+                return false;
+        }
+    }
+    return true;
+}

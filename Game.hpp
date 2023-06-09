@@ -10,7 +10,7 @@
 using Move = std::pair<unsigned int, unsigned int>;
 
 char verifyGameOver(Board board, Move lastMove, int winCondition);
-std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymbol, unsigned char botSymbol, int depth, Move lastMove,
+int minimax(unsigned int winCondition, unsigned char playerSymbol, unsigned char botSymbol, int depth, Move lastMove,
             bool maximizingPlayer,
             Board& board, std::vector<Move>& availableMoves, int alpha = std::numeric_limits<int>::min(),
             int beta = std::numeric_limits<int>::max());
@@ -28,8 +28,11 @@ class Game
 public:
     Board board;
 
-    Game(unsigned int N = 3)
+    Game(unsigned int N = 3, unsigned int winCondition = 3, unsigned char playerSymbol = 'X', unsigned char botSymbol = 'O')
     : board(N)
+    , winCondition(winCondition)
+    , playerSymbol(playerSymbol)
+    , botSymbol(botSymbol)
     {}
 
     void reset()
@@ -58,113 +61,9 @@ public:
 
     void botMove();
 
-    /* void verifyGameOver()
-    {
-        if(gameOver)
-            return;
-
-        unsigned char symbol = board.get(lastMove.first, lastMove.second);
-        unsigned int count = 0;
-        Move tempMove = lastMove;
-
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            ++tempMove.first;
-            ++count;
-        }
-        tempMove = lastMove;
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            --tempMove.first;
-            ++count;
-        }
-        if(count >= winCondition)
-        {
-            gameOver = true;
-            return;
-        }
-
-        tempMove = lastMove;
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            ++tempMove.first;
-            ++count;
-        }
-        tempMove = lastMove;
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            --tempMove.first;
-            ++count;
-        }
-        if(count >= winCondition)
-        {
-            gameOver = true;
-            return;
-        }
-
-        tempMove = lastMove;
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            ++tempMove.second;
-            ++count;
-        }
-        tempMove = lastMove;
-
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            ++tempMove.second;
-            ++count;
-        }
-        if(count >= winCondition)
-        {
-            gameOver = true;
-            return;
-        }
-
-        tempMove = lastMove;
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            ++tempMove.first;
-            ++tempMove.second;
-            ++count;
-        }
-        tempMove = lastMove;
-
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            --tempMove.first;
-            --tempMove.second;
-            ++count;
-        }
-        if(count >= winCondition)
-        {
-            gameOver = true;
-            return;
-        }
-
-        tempMove = lastMove;
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            ++tempMove.first;
-            --tempMove.second;
-            ++count;
-        }
-        tempMove = lastMove;
-
-        while(board.get(tempMove.first, tempMove.second) == symbol)
-        {
-            --tempMove.first;
-            ++tempMove.second;
-            ++count;
-        }
-        if(count >= winCondition)
-        {
-            gameOver = true;
-            return;
-        }
-    } */
-
     void play();
+
+    Move findBestMove();
 };
 
 #endif // !GAME_HPP

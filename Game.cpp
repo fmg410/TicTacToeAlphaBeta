@@ -39,15 +39,17 @@ void Game::botMove()
             }
         } */
 
-        std::vector<Move> availableMoves = board.getEmptyCells();
-        Board tempBoard = board;
-        std::pair<int, Move> bestMove = minimax(winCondition, playerSymbol, botSymbol, 0, lastMove, true, tempBoard, availableMoves);
+        Move bestMove;
+        if(board.isEmpty())
+            bestMove = std::make_pair(0, 0);
+        else
+            bestMove =  findBestMove();
 
-        board.set(bestMove.second, 'O');
-
-        std::cout << "Bot move: " << bestMove.first << " " << bestMove.second.first << " " << bestMove.second.second << '\n';
-
-        playerTurn = true;
+        if(board.set(bestMove, 'O'))
+        {
+            lastMove = bestMove;
+            playerTurn = true;
+        }
     }
 
  void Game::play()
@@ -67,7 +69,9 @@ void Game::botMove()
             }
         }
         if(gameOver)
-            return;
+        {
+            reset();
+        }
     }
 
 char verifyGameOver(Board board, Move lastMove, int winCondition)
@@ -165,30 +169,30 @@ char verifyGameOver(Board board, Move lastMove, int winCondition)
             bool maximizingPlayer,
             int values[], int alpha = std::numeric_limits<int>::min(),
             int beta = std::numeric_limits<int>::max()) */
-std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymbol, unsigned char botSymbol, int depth, Move lastMove,
+int minimax(unsigned int winCondition, unsigned char playerSymbol, unsigned char botSymbol, int depth, Move lastMove,
             bool maximizingPlayer,
             Board& board, std::vector<Move>& availableMoves, int alpha,
             int beta)
 {
-    std::cout << depth << '\n';
+    //std::cout << depth << '\n';
     // Terminating condition. i.e
     // leaf node is reached
     unsigned char winner = verifyGameOver(board, lastMove, winCondition);
     if (winner || board.isFull())
     {
         if(winner == botSymbol)
-            return std::make_pair(std::max(10000 / (depth + 1), 1), lastMove);
+            return std::max(10000 / (depth + 1), 1);
         else if(winner == playerSymbol)
-            return std::make_pair(std::min(-10000 / (depth + 1), -1), lastMove);
+            return std::min(-10000 / (depth + 1), -1);
         else
-            return std::make_pair(0, lastMove);
+            return 0;
     }
 
-    std::pair<int, Move> bestMove;
+    int bestMove;
     if(maximizingPlayer)
-        bestMove.first = std::numeric_limits<int>::min();
+        bestMove = std::numeric_limits<int>::min();
     else
-        bestMove.first = std::numeric_limits<int>::max();
+        bestMove = std::numeric_limits<int>::max();
     for (auto&& currentMove : availableMoves)
     {
         if(board.isTaken(currentMove))
@@ -202,11 +206,11 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
 
             // Recur for left and
             // right children
-            auto tempMove = minimax(winCondition, playerSymbol, botSymbol, depth + 1, currentMove,
+            int tempMove = minimax(winCondition, playerSymbol, botSymbol, depth + 1, currentMove,
                             false, board, availableMoves, alpha, beta);
-            bestMove = (bestMove.first < tempMove.first) ? tempMove : bestMove;
+            bestMove = std::max(bestMove, tempMove);
             //best = std::max(best, bestMove.first);
-            alpha = std::max(alpha, bestMove.first);
+            alpha = std::max(alpha, bestMove);
 
             // Alpha Beta Pruning
             if (beta <= alpha)
@@ -224,8 +228,8 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
             // right children
             auto tempMove = minimax(winCondition, playerSymbol, botSymbol, depth + 1, currentMove,
                             true, board, availableMoves, alpha, beta);
-            bestMove = (bestMove.first > tempMove.first) ? tempMove : bestMove;
-            beta = std::min(beta, bestMove.first);
+            bestMove = std::min(bestMove, tempMove);
+            beta = std::min(beta, bestMove);
 
             // Alpha Beta Pruning
             if (beta <= alpha)
@@ -236,5 +240,40 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
         }
         board.set(currentMove, '\0');
     }
+    return bestMove;
+}
+
+Move Game::findBestMove()
+{
+    int bestVal = std::numeric_limits<int>::min();;
+    Move bestMove;
+    bestMove.first = -1;
+    bestMove.second = -1;
+
+    std::vector<Move> availableMoves = board.getEmptyCells();
+    Board tempBoard = board;
+
+    for(auto&& currentMove : availableMoves)
+    {
+        tempBoard.set(currentMove, 'O');
+        int move = minimax(winCondition, playerSymbol, botSymbol, 0, currentMove, false, tempBoard, availableMoves);
+        if(move > bestVal)
+        {
+            bestVal = move;
+            bestMove = currentMove;
+        }
+        tempBoard.set(currentMove, '\0');
+        std::cout << "Current move: " << currentMove.first << " " << currentMove.second << '\n';
+
+    }
+
+
+    std::cout << "Bot move: " << bestMove.first << " " << bestMove.second << '\n';
+
+
+    // Traverse all cells, evaluate minimax function for
+    // all empty cells. And return the cell with optimal
+    // value.
+
     return bestMove;
 }

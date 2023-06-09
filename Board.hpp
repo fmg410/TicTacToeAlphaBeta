@@ -32,6 +32,8 @@ public:
     bool isTaken(unsigned int column, unsigned int row) const;
 
     bool isTaken(std::pair<unsigned int, unsigned int> move) const;
+
+    bool isEmpty() const;
 };
 
 #endif // !BOARD_HPP
