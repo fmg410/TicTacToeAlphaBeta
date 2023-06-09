@@ -12,7 +12,7 @@ using Move = std::pair<unsigned int, unsigned int>;
 char verifyGameOver(Board board, Move lastMove, int winCondition);
 std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymbol, unsigned char botSymbol, int depth,
             bool maximizingPlayer,
-            Board& board, std::vector<Move>& availableMoves, int alpha = std::numeric_limits<int>::min(),
+            Board& board, std::vector<Move> availableMoves, int alpha = std::numeric_limits<int>::min(),
             int beta = std::numeric_limits<int>::max());
 
 class Game
