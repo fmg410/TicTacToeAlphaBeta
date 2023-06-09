@@ -7,9 +7,12 @@ Board::Board(unsigned int N)
     board.resize(N * N, '\0');
 }
 
-void Board::set(unsigned int column, unsigned int row, unsigned char value)
+bool Board::set(unsigned int column, unsigned int row, unsigned char value)
 {
+    if(column >= _N || row >= _N)
+        return false;
     board[column * _N + row] = value;
+    return true;
 }
 
 unsigned char Board::get(unsigned int column, unsigned int row)
@@ -62,7 +65,19 @@ bool Board::isFull() const
     return true;
 }
 
-void Board::set(std::pair<unsigned int, unsigned int> move, unsigned char value)
+bool Board::set(std::pair<unsigned int, unsigned int> move, unsigned char value)
 {
-    set(move.first, move.second, value);
+    return set(move.first, move.second, value);
+}
+
+bool Board::isTaken(std::pair<unsigned int, unsigned int> move) const
+{
+    return isTaken(move.first, move.second);
+}
+
+bool Board::isTaken(unsigned int column, unsigned int row) const
+{
+    if(column >= _N || row >= _N)
+        return true;
+    return board[column * _N + row];
 }

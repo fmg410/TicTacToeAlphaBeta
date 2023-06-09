@@ -13,7 +13,7 @@ public:
 
     Board(unsigned int N);
 
-    void set(unsigned int column, unsigned int row, unsigned char value);
+    bool set(unsigned int column, unsigned int row, unsigned char value);
 
     unsigned char get(unsigned int column, unsigned int row);
 
@@ -27,7 +27,11 @@ public:
 
     bool isFull() const;
 
-    void set(std::pair<unsigned int, unsigned int> move, unsigned char value);
+    bool set(std::pair<unsigned int, unsigned int> move, unsigned char value);
+
+    bool isTaken(unsigned int column, unsigned int row) const;
+
+    bool isTaken(std::pair<unsigned int, unsigned int> move) const;
 };
 
 #endif // !BOARD_HPP
