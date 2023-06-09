@@ -76,9 +76,6 @@ void Game::botMove()
 
 char verifyGameOver(Board board, Move lastMove, int winCondition)
 {
-    if(board.isFull())
-        return '\1';
-
     unsigned char symbol = board.get(lastMove.first, lastMove.second);
     unsigned int count = 0;
     Move tempMove = lastMove;
@@ -162,6 +159,8 @@ char verifyGameOver(Board board, Move lastMove, int winCondition)
     {
         return symbol;
     }
+    if(board.isFull())
+        return '\1';
     return '\0';
 }
 
@@ -181,9 +180,9 @@ int minimax(unsigned int winCondition, unsigned char playerSymbol, unsigned char
     if (winner || board.isFull())
     {
         if(winner == botSymbol)
-            return std::max(10000 / (depth + 1), 1);
+            return std::max(10000 - depth, 1);
         else if(winner == playerSymbol)
-            return std::min(-10000 / (depth + 1), -1);
+            return std::min(-10000 + depth, -1);
         else
             return 0;
     }

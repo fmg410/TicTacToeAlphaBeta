@@ -9,9 +9,14 @@ int main()
     /* std::vector<unsigned char> cells ={
     '\0', 'O', '\0',
     '\0', '\0', '\0',
-    '\0', 'O', 'X' };
+    '\0', 'O', 'X' }; */
+    std::vector<unsigned char> cells ={
+    'O', 'O', 'O', 'X',
+    'O', 'X', 'O', 'O',
+    'X', 'O', '\0', 'X',
+    'X', '\0', 'X', 'X' };
     game.board.board = cells;
-    game.playerTurn = true; */
+    game.playerTurn = false;
     int i = 0;
     for(auto&& cell : game.board.board)
     {
