@@ -176,9 +176,6 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
 
     Move currentMove = availableMoves.at(availableMoves.size() - 1 - depth);
     std::cout << "Current move: " << currentMove.first << " " << currentMove.second << " " << availableMoves.size() - 1 - depth << '\n';
-    if(i == 50)
-        exit(1);
-    i++;
     board.set(currentMove, maximizingPlayer ? botSymbol : playerSymbol);
     unsigned char winner = verifyGameOver(board, currentMove, winCondition);
     if (winner || board.isFull())
@@ -200,8 +197,7 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
         bestMove.first = std::numeric_limits<int>::min();
         // Recur for left and
         // right children
-        while(std::next_permutation(availableMoves.begin(), availableMoves.end() - 1 - depth))
-        {
+        do {
             auto tempMove = minimax(winCondition, playerSymbol, botSymbol, depth + 1,
                               false, board, availableMoves, alpha, beta);
             bestMove = (bestMove.first < tempMove.first) ? tempMove : bestMove;
@@ -210,11 +206,8 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
 
             // Alpha Beta Pruning
             if (beta <= alpha)
-            {
-                while(std::next_permutation(availableMoves.begin(), availableMoves.end() - 1 - depth)) {}
                 break;
-            }
-        }
+        } while(std::next_permutation(availableMoves.begin(), availableMoves.end() - 1 - depth));
         board.set(currentMove, '\0');
         return bestMove;
     }
@@ -226,8 +219,7 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
 
         // Recur for left and
         // right children
-        while(std::next_permutation(availableMoves.begin(), availableMoves.end() - 1 - depth))
-        {
+        do {
             auto tempMove = minimax(winCondition, playerSymbol, botSymbol, depth + 1,
                               true, board, availableMoves, alpha, beta);
             bestMove = (bestMove.first > tempMove.first) ? tempMove : bestMove;
@@ -235,11 +227,8 @@ std::pair<int, Move> minimax(unsigned int winCondition, unsigned char playerSymb
 
             // Alpha Beta Pruning
             if (beta <= alpha)
-            {
-                while(std::next_permutation(availableMoves.begin(), availableMoves.end() - 1 - depth)) {}
                 break;
-            }
-        }
+        } while(std::next_permutation(availableMoves.begin(), availableMoves.end() - 1 - depth));
         board.set(currentMove, '\0');
         return bestMove;
     }
