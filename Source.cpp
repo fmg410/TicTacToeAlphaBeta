@@ -1,61 +1,42 @@
+#include "MyUtils.hpp"
 #include "Game.hpp"
 #include <iostream>
-//#include "Board.hpp"
-#include "Test.hpp"
+
 int main()
 {
-    //Test test;
-    Game game(4, 4);
-    /* std::vector<unsigned char> cells ={
-    '\0', 'O', '\0',
-    '\0', '\0', '\0',
-    '\0', 'O', 'X' }; */
-    std::vector<unsigned char> cells ={
-    'O', 'O', 'O', 'X',
-    'O', 'X', 'O', 'O',
-    'X', 'O', '\0', 'X',
-    'X', '\0', 'X', 'X' };
-    game.board.board = cells;
-    game.playerTurn = false;
-    int i = 0;
-    for(auto&& cell : game.board.board)
-    {
-        std::cout << char((cell == 0 ? '_' : cell)) << " ";
-        i++;
-        if(i % game.board.getBoardSize() == 0)
-            std::cout << '\n';
-    }
-    std::cout << '\n';
-    unsigned int x, y;
+    Game game(3, 3);
+    int x, y;
+    int choice;
     while(true)
     {
-        game.play();
-        for(auto&& cell : game.board.board)
+        std::cout << "Ktory gracz ma zaczynac:\n1.Bot\n2.Gracz" << std::endl;
+        readInt(choice, 1, 2);
+        game.setPlayerTurn(choice == 1 ? false : true);
+        std::cout << "Podaj rozmiar stolu: " << std::endl;
+        readInt(choice, 3, 100);
+        game.resizeBoard(choice);
+        std::cout << "Podaj dlugosc wygrywajacego rzedu: " << std::endl;
+        readInt(choice, 3, game.getBoardSize());
+        game.setWinCondition(choice);
+        while(true)
         {
-            std::cout << char((cell == 0 ? '_' : cell)) << " ";
-            i++;
-            if(i % game.board.getBoardSize() == 0)
-                std::cout << '\n';
+            game.botMove();
+            game.displayBoard();
+            if(game.isGameOver())
+                break;
+            std::cout << "Podaj kolumne, liczac od 1: " << std::endl;
+            readInt(x, 1, game.getBoardSize());
+            std::cout << "Podaj wiersz, liczac od 1: " << std::endl;
+            readInt(y, 1, game.getBoardSize());
+            if(!game.playerMove(y - 1, x - 1))
+                std::cout << "\nNiepoprawny ruch, podaj inny\n" << std::endl;
         }
-        if(game.isGameOver())
-            continue;
-        std::cout << '\n';
-        std::cin >> x >> y;
-        game.playerMove(y, x);
+        std::cout << "Resetowac gre:\n1.Tak\n2.Nie" << std::endl;
+        readInt(choice, 1, 2);
+        if(choice == 2)
+            return 0;
+        else
+            game.reset();
     }
-    /* game.playerMove(0, 2);
-    game.play();
-    for(auto&& cell : game.board.board)
-    {
-        std::cout << char((cell == 0 ? '_' : cell)) << " ";
-        i++;
-        if(i % 3 == 0)
-            std::cout << '\n';
-    } */
-    /* std::vector<int> v = {1};
-    if(std::next_permutation(v.begin(), v.end()))
-        std::cout << "yes";
-    else
-        std::cout << "no"; */
     return 0;
 }

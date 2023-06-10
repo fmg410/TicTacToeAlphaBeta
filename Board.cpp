@@ -94,3 +94,8 @@ bool Board::isEmpty() const
     }
     return true;
 }
+
+unsigned char Board::get(std::pair<unsigned int, unsigned int> move)
+{
+    return get(move.first, move.second);
+}

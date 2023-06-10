@@ -1,78 +1,65 @@
 #include "Game.hpp"
 
+bool Game::playerMove(unsigned int column, unsigned int row)
+{
+    if(gameOver)
+        return false;
 
+    if(!playerTurn)
+        return false;
 
-
-
-void Game::playerMove(unsigned int column, unsigned int row)
+    if (board.get(column, row) == '\0')
     {
-        if(gameOver)
-            return;
-
-        if(!playerTurn)
-            return;
-
-        if (board.get(column, row) == '\0')
-        {
-            board.set(column, row, 'X');
-            lastMove = std::make_pair(column, row);
-            playerTurn = false;
-        }
+        board.set(column, row, 'X');
+        lastMove = std::make_pair(column, row);
+        playerTurn = false;
+        gameOver = verifyGameOver(board, lastMove, winCondition);
+        return true;
     }
+    return false;
+}
 
 void Game::botMove()
+{
+    if(gameOver)
+        return;
+    if(playerTurn)
+        return;
+
+    /* for (unsigned int i = 0; i < board.getBoardSize(); ++i)
     {
-        if(gameOver)
-            return;
-        if(playerTurn)
-            return;
-
-        /* for (unsigned int i = 0; i < board.getBoardSize(); ++i)
+        for (unsigned int j = 0; j < board.getBoardSize(); ++j)
         {
-            for (unsigned int j = 0; j < board.getBoardSize(); ++j)
+            if (board.get(i, j) == '\0')
             {
-                if (board.get(i, j) == '\0')
-                {
-                    board.set(i, j, 'O');
-                    return;
-                }
+                board.set(i, j, 'O');
+                return;
             }
-        } */
-
-        Move bestMove;
-        if(board.isEmpty())
-            bestMove = std::make_pair(0, 0);
-        else
-            bestMove =  findBestMove();
-
-        if(board.set(bestMove, 'O'))
-        {
-            lastMove = bestMove;
-            playerTurn = true;
         }
+    } */
+
+    Move bestMove;
+    if(board.isEmpty())
+        bestMove = std::make_pair(0, 0);
+    else
+        bestMove =  findBestMove();
+
+    if(board.get(bestMove) == '\0')
+    {
+        board.set(bestMove, 'O');
+        lastMove = bestMove;
+        playerTurn = true;
+        gameOver = verifyGameOver(board, lastMove, winCondition);
     }
+}
 
  void Game::play()
+{
+    if(gameOver)
     {
-        if(!playerTurn)
-        {
-            if(verifyGameOver(board, lastMove, winCondition))
-            {
-                gameOver = true;
-                return;
-            }
-            botMove();
-            if(verifyGameOver(board, lastMove, winCondition))
-            {
-                gameOver = true;
-                return;
-            }
-        }
-        if(gameOver)
-        {
-            reset();
-        }
+        reset();
     }
+}
 
 char verifyGameOver(Board board, Move lastMove, int winCondition)
 {
@@ -262,12 +249,11 @@ Move Game::findBestMove()
             bestMove = currentMove;
         }
         tempBoard.set(currentMove, '\0');
-        std::cout << "Current move: " << currentMove.first << " " << currentMove.second << '\n';
-
+        //std::cout << "Current move: " << currentMove.first << " " << currentMove.second << '\n';
     }
 
 
-    std::cout << "Bot move: " << bestMove.first << " " << bestMove.second << '\n';
+    //std::cout << "Bot move: " << bestMove.first << " " << bestMove.second << '\n';
 
 
     // Traverse all cells, evaluate minimax function for
@@ -275,4 +261,16 @@ Move Game::findBestMove()
     // value.
 
     return bestMove;
+}
+
+void Game::displayBoard()
+{
+    int i = 0;
+    for(auto&& cell : board.board)
+    {
+        std::cout << char((cell == 0 ? '_' : cell)) << " ";
+        i++;
+        if(i % board.getBoardSize() == 0)
+            std::cout << '\n';
+    }
 }

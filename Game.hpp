@@ -57,13 +57,21 @@ public:
         return gameOver;
     }
 
-    void playerMove(unsigned int column, unsigned int row);
+    bool playerMove(unsigned int column, unsigned int row);
 
     void botMove();
 
     void play();
 
     Move findBestMove();
+
+    unsigned int getBoardSize() { return board.getBoardSize(); }
+
+    void displayBoard();
+
+    void setPlayerTurn(bool _playerTurn) { playerTurn = _playerTurn; }
+
+    void setWinCondition(int _winCondition) { winCondition = _winCondition; }
 };
 
 #endif // !GAME_HPP

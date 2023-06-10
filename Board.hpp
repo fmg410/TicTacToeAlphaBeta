@@ -34,6 +34,8 @@ public:
     bool isTaken(std::pair<unsigned int, unsigned int> move) const;
 
     bool isEmpty() const;
+
+    unsigned char get(std::pair<unsigned int, unsigned int> move);
 };
 
 #endif // !BOARD_HPP
