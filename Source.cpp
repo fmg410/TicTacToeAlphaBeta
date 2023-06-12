@@ -31,6 +31,7 @@ int main()
             if(!game.playerMove(y - 1, x - 1))
                 std::cout << "\nNiepoprawny ruch, podaj inny\n" << std::endl;
         }
+        game.displayWinner();
         std::cout << "Resetowac gre:\n1.Tak\n2.Nie" << std::endl;
         readInt(choice, 1, 2);
         if(choice == 2)

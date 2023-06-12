@@ -4,6 +4,8 @@
 #include <utility>
 #include <vector>
 
+using Move = std::pair<unsigned int, unsigned int>;
+
 class Board
 {
     unsigned int _N{};
@@ -23,19 +25,19 @@ public:
 
     void reset();
 
-    std::vector<std::pair<unsigned int, unsigned int>> getEmptyCells() const;
+    std::vector<Move> getEmptyCells() const;
 
     bool isFull() const;
 
-    bool set(std::pair<unsigned int, unsigned int> move, unsigned char value);
+    bool set(Move move, unsigned char value);
 
     bool isTaken(unsigned int column, unsigned int row) const;
 
-    bool isTaken(std::pair<unsigned int, unsigned int> move) const;
+    bool isTaken(Move move) const;
 
     bool isEmpty() const;
 
-    unsigned char get(std::pair<unsigned int, unsigned int> move);
+    unsigned char get(Move move);
 };
 
 #endif // !BOARD_HPP

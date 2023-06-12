@@ -38,9 +38,9 @@ void Board::reset()
     std::fill(board.begin(), board.end(), '\0');
 }
 
-std::vector<std::pair<unsigned int, unsigned int>> Board::getEmptyCells() const
+std::vector<Move> Board::getEmptyCells() const
 {
-    std::vector<std::pair<unsigned int, unsigned int>> emptyCells;
+    std::vector<Move> emptyCells;
     for(unsigned int i = 0; i < _N; ++i)
     {
         for(unsigned int j = 0; j < _N; ++j)
@@ -65,12 +65,12 @@ bool Board::isFull() const
     return true;
 }
 
-bool Board::set(std::pair<unsigned int, unsigned int> move, unsigned char value)
+bool Board::set(Move move, unsigned char value)
 {
     return set(move.first, move.second, value);
 }
 
-bool Board::isTaken(std::pair<unsigned int, unsigned int> move) const
+bool Board::isTaken(Move move) const
 {
     return isTaken(move.first, move.second);
 }
@@ -95,7 +95,7 @@ bool Board::isEmpty() const
     return true;
 }
 
-unsigned char Board::get(std::pair<unsigned int, unsigned int> move)
+unsigned char Board::get(Move move)
 {
     return get(move.first, move.second);
 }

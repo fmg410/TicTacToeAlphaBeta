@@ -28,50 +28,31 @@ class Game
 public:
     Board board;
 
-    Game(unsigned int N = 3, unsigned int winCondition = 3, unsigned char playerSymbol = 'X', unsigned char botSymbol = 'O')
-    : board(N)
-    , winCondition(winCondition)
-    , playerSymbol(playerSymbol)
-    , botSymbol(botSymbol)
-    {}
+    Game(unsigned int N = 3, unsigned int winCondition = 3, unsigned char playerSymbol = 'X', unsigned char botSymbol = 'O');
 
-    void reset()
-    {
-        board.reset();
-        gameOver = false;
-        playerTurn = false;
-    }
+    void reset();
 
-    void resizeBoard(unsigned int N)
-    {
-        board.resize(N);
-    }
+    void resizeBoard(unsigned int N);
 
-    bool isPlayerTurn() const
-    {
-        return playerTurn;
-    }
+    bool isPlayerTurn() const;
 
-    bool isGameOver() const
-    {
-        return gameOver;
-    }
-
-    bool playerMove(unsigned int column, unsigned int row);
+    bool isGameOver() const;
 
     void botMove();
 
-    void play();
-
-    Move findBestMove();
-
-    unsigned int getBoardSize() { return board.getBoardSize(); }
+    unsigned int getBoardSize();
 
     void displayBoard();
 
-    void setPlayerTurn(bool _playerTurn) { playerTurn = _playerTurn; }
+    void setPlayerTurn(bool _playerTurn);
 
-    void setWinCondition(int _winCondition) { winCondition = _winCondition; }
+    void setWinCondition(int _winCondition);
+
+    void displayWinner();
+
+    Move findBestMove();
+
+    bool playerMove(unsigned int column, unsigned int row);
 };
 
 #endif // !GAME_HPP
